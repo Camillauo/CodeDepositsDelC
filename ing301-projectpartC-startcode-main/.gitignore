@@ -103,7 +103,7 @@ celerybeat.pid
 
 # Environments
 .env
-smarthouse/.venv
+.venv
 env/
 venv/
 ENV/
@@ -127,6 +127,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-# PyCharm
-.idea
+.DS_Store
