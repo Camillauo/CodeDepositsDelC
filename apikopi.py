@@ -11,7 +11,6 @@ from pathlib import Path
 
 app = FastAPI()
 
-# Last inn data fra databasen
 def setup_database():
     project_dir = Path(__file__).parent.parent
     db_file = project_dir / "data" / "db.sql"
@@ -21,7 +20,7 @@ repo = setup_database()
 smarthouse = repo.load_smarthouse_deep()
 
 
-# Endepunkt: Hent all info om smarthuset
+
 @app.get("/smarthouse/")
 def get_smarthouse():
     return {
@@ -31,12 +30,12 @@ def get_smarthouse():
         "area": smarthouse.get_area()
     }
 
-# Endepunkt: Hent alle etasjer
+
 @app.get("/smarthouse/floor")
 def get_floors():
     return [{"floor_id": f.id, "rooms": len(f.rooms)} for f in smarthouse.get_floors()]
 
-# Endepunkt: Hent én etasje basert på ID
+
 @app.get("/smarthouse/floor/{fid}")
 def get_floor(fid: int):
     floor = smarthouse.get_floor_by_id(fid)
@@ -48,7 +47,7 @@ def get_floor(fid: int):
         "rooms": [r.name for r in floor.rooms]
     }
 
-# Endepunkt: Hent alle rom i en etasje
+
 @app.get("/smarthouse/floor/{fid}/room")
 def get_rooms_in_floor(fid: int):
     floor = smarthouse.get_floor_by_id(fid)
@@ -56,7 +55,7 @@ def get_rooms_in_floor(fid: int):
         raise HTTPException(status_code=404, detail="Floor not found")
     return [{"room_id": r.id, "name": r.name, "area": r.area} for r in floor.rooms]
 
-# Endepunkt: Hent spesifikt rom
+
 @app.get("/smarthouse/floor/{fid}/room/{rid}")
 def get_room(fid: int, rid: int):
     floor = smarthouse.get_floor_by_id(fid)
@@ -72,7 +71,7 @@ def get_room(fid: int, rid: int):
         "devices": [d.name for d in room.devices]
     }
 
-# Endepunkt: Hent alle enheter
+
 @app.get("/smarthouse/device")
 def get_all_devices():
     return [{
@@ -82,7 +81,7 @@ def get_all_devices():
         "manufacturer": d.manufacturer
     } for d in smarthouse.get_devices()]
 
-# Endepunkt: Hent én enhet basert på UUID
+
 @app.get("/smarthouse/device/{uuid}")
 def get_device(uuid: str):
     device = smarthouse.get_device_by_uuid(uuid)
@@ -103,7 +102,7 @@ from fastapi import FastAPI, HTTPException
 from typing import List, Dict, Any, Optional
 
 
-# Endepunkt: Hent nåværende måling for en sensor
+
 @app.get("/smarthouse/sensor/{uuid}/current")
 def get_current_sensor_measurement(uuid: str):
     sensor = smarthouse.get_sensor_by_uuid(uuid)
